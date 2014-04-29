@@ -1,0 +1,23 @@
+{
+	"name": "makzumi/calendar",
+	"type": "library",
+	"description": "Laravel 4 Flexible Calendar",
+	"keywords": ["laravel","calendar", "events"],
+	"authors": [
+		{
+			"name": "Ammar Almakzumi",
+			"email": "info@makzumi.com"
+		}
+	],
+	"require": {
+		"php": ">=5.3.0",
+		"illuminate/support": "4.1.*"
+	},
+	"autoload": {
+		"classmap": [],
+		"psr-0": {
+			"Makzumi\\Calendar\\": "src/"
+		}
+	},
+	"minimum-stability": "stable"
+}
