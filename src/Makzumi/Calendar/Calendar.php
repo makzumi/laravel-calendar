@@ -143,10 +143,10 @@ class Calendar {
 			$h .= "</th>";
 		}
 		$h .= "</tr>";
-		$h .= "<tr>";
+		$h .= "<tr class='" . $this->labelsClass . "'>";
 
 		for ($i = 0; $i <= 6; $i++) {
-			$h .= "<td class='" . $this->labelsClass . "'>";
+			$h .= "<td>";
 			$h .= $this->day_lbls[$i];
 			$h .= "</td>";
 		}
