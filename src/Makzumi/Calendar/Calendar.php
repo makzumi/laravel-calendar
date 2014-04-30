@@ -118,7 +118,7 @@ class Calendar {
 	public function setPrevClass($class) {
 		$this->prevClass = $class;
 	}
-	
+
 	public function setLabelsClass($class) {
 		$this->labelsClass = $class;
 	}
@@ -146,7 +146,7 @@ class Calendar {
 		$h .= "<tr>";
 
 		for ($i = 0; $i <= 6; $i++) {
-			$h .= "<td class='".$this->labelsClass."'>";
+			$h .= "<td class='" . $this->labelsClass . "'>";
 			$h .= $this->day_lbls[$i];
 			$h .= "</td>";
 		}
