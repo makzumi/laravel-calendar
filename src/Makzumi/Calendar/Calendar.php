@@ -123,7 +123,7 @@ class Calendar {
 		$this->labelsClass = $class;
 	}
 
-	private function buildHeader() {
+	private function buildHeader () {
 		$month_name = $this->month_lbls[$this->month - 1] . ' ' . $this->year;
 		$h = "<table class='" . $this->tableClass . "'>";
 		$h .= "<tr class='" . $this->headClass . "'>";
@@ -143,6 +143,7 @@ class Calendar {
 			$h .= "</th>";
 		}
 		$h .= "</tr>";
+		
 		$h .= "<tr class='" . $this->labelsClass . "'>";
 
 		for ($i = 0; $i <= 6; $i++) {
@@ -150,12 +151,13 @@ class Calendar {
 			$h .= $this->day_lbls[$i];
 			$h .= "</td>";
 		}
+		
 		$h .= "</tr>";
 
 		$this->html .= $h;
 	}
 
-	private function buildBody() {
+	private function buildBody () {
 		$day = 1;
 		$startingDay = date('N', strtotime('first day of this month'));
 		$monthLength = $this->days_month[$this->month - 1];
