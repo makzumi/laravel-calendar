@@ -146,7 +146,7 @@ class Calendar {
 		$h .= "<tr>";
 
 		for ($i = 0; $i <= 6; $i++) {
-			$h .= "<td>";
+			$h .= "<td class='".$this->labelsClass."'>";
 			$h .= $this->day_lbls[$i];
 			$h .= "</td>";
 		}
@@ -159,7 +159,7 @@ class Calendar {
 		$day = 1;
 		$startingDay = date('N', strtotime('first day of this month'));
 		$monthLength = $this->days_month[$this->month - 1];
-		$h = "<tr class='".$this->labelsClass."'>";
+		$h = "<tr>";
 		for ($i = 0; $i < 9; $i++) {
 			for ($j = 0; $j <= 6; $j++) {
 				$h .= "<td>";
