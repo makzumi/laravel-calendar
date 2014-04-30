@@ -26,6 +26,7 @@ class Calendar {
 
 	private $dayWrap = array('<div class="cal_day">', '</div>');
 	private $dateWrap = array('<div class="date">', '</div>');
+	private $labelsClass = 'cal_labels';
 	private $eventWrap = array('<p>', '</p>');
 
 	public function __construct() {
@@ -117,6 +118,10 @@ class Calendar {
 	public function setPrevClass($class) {
 		$this->prevClass = $class;
 	}
+	
+	public function setLabelsClass($class) {
+		$this->labelsClass = $class;
+	}
 
 	private function buildHeader() {
 		$month_name = $this->month_lbls[$this->month - 1] . ' ' . $this->year;
@@ -154,7 +159,7 @@ class Calendar {
 		$day = 1;
 		$startingDay = date('N', strtotime('first day of this month'));
 		$monthLength = $this->days_month[$this->month - 1];
-		$h = "<tr>";
+		$h = "<tr class='".$this->labelsClass."'>";
 		for ($i = 0; $i < 9; $i++) {
 			for ($j = 0; $j <= 6; $j++) {
 				$h .= "<td>";
