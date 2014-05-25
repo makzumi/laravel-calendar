@@ -1,5 +1,5 @@
-laravel-calendar
-================
+Laravel 4 Calendar
+==================
 
 Flexible Calendar for Laravel 4, supports Month, Week and Day Views and multiple events per date.
 
