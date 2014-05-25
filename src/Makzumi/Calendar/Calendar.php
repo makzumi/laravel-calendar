@@ -295,7 +295,7 @@ class Calendar {
 
 		$events = $this->events;
 		$h = "";
-		for ($i = 8; $i < 21; $i++) {
+		for ($i = $this->start_hour; $i < $this->end_hour; $i++) {
 			for ($t = 0; $t < 2; $t++) {
 				$h .= "<tr>";
 				$min = $t == 0 ? ":00" : ":30";
@@ -333,7 +333,7 @@ class Calendar {
 
 		$events = $this->events;
 		$h = "";
-		for ($i = 8; $i < 21; $i++) {
+		for ($i = $this->start_hour; $i < $this->end_hour; $i++) {
 			for ($t = 0; $t < 2; $t++) {
 				$h .= "<tr>";
 				$min = $t == 0 ? ":00" : ":30";
