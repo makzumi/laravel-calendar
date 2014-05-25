@@ -173,7 +173,7 @@ class Calendar {
 
 	private function buildHeader() {
 		$month_name = $this->month_lbls[$this->month - 1] . ' ' . $this->year;
-		$h = "<table border='1' class='" . $this->tableClass . "'>";
+		$h = "<table class='" . $this->tableClass . "'>";
 		$h .= "<tr class='" . $this->headClass . "'>";
 		$cs = 5;
 		if ($this->view == 'week' || $this->view == 'day')
