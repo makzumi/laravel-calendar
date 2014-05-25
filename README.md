@@ -3,7 +3,7 @@ Laravel 4 Calendar
 
 Flexible Calendar for Laravel 4, supports Month, Week and Day Views and multiple events per date.
 
-To change the view type dynamically, pass in a GET variable called 'cv' (calendar view) with either 'week' or 'day'. Day and Week views are split into 30 minute interval rows. 
+To change the view type dynamically, pass in a GET variable called 'cv' (calendar view) with either a 'week' or 'day' value. Day and Week views are split into 30 minute interval rows. 
 
 Install:
 
@@ -11,14 +11,14 @@ Add this to "require" in composer.json:
 
 		"makzumi/calendar": "dev-master"
 
-After that run a composer update, then in app.php:
+After that run a composer update, then in app.php add:
 
 		'providers' => array(
 					...,
 					'Makzumi\Calendar\CalendarServiceProvider',
 				),
 
-Usage, from your controller:
+To use, create a new Calender instance and generate it, below you'll find several options to customize it as well:
 
 		$events = array(
 			"2014-04-09 10:30:00" => array(
