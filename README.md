@@ -3,7 +3,7 @@ Laravel 4 Calendar
 
 Flexible Calendar for Laravel 4, supports Month, Week and Day Views and multiple events per date.
 
-To change the view type dynamically, pass in a GET variable called cv (calendar view) with either 'week' or 'day'. Day and Week views are split into 30 minute interval rows. 
+To change the view type dynamically, pass in a GET variable called 'cv' (calendar view) with either 'week' or 'day'. Day and Week views are split into 30 minute interval rows. 
 
 Install:
 
