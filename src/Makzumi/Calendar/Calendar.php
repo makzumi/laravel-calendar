@@ -302,7 +302,7 @@ class Calendar {
 				$h .= "<td class='$this->timeClass'>" . date('g:ia', strtotime($i . $min)) . "</td>";
 				for ($k = 0; $k < 1; $k++) {
 					$h .= "<td colspan='3'>";
-
+					$h .= $this->dateWrap[0];
 					$wd = $this->week_days[$k];
 					$time_r = $this->year . '-' . $this->month . '-' . $wd . ' ' . $i . ':00:00';
 					$min = $t == 0 ? '' : '+30 minute';
@@ -319,6 +319,7 @@ class Calendar {
 						}
 					}
 					$h .= !$hasEvent ? '&nbsp;' : '';
+					$h .= $this->dateWrap[1];
 					$h .= "</td>";
 				}
 				$h .= "<tr>";
@@ -339,7 +340,7 @@ class Calendar {
 				$h .= "<td class='$this->timeClass'>" . date('g:ia', strtotime($i . $min)) . "</td>";
 				for ($k = 0; $k < count($this->week_days); $k++) {
 					$h .= "<td>";
-
+					$h .= $this->dateWrap[0];
 					$wd = $this->week_days[$k];
 					$time_r = $this->year . '-' . $this->month . '-' . $wd . ' ' . $i . ':00:00';
 					$min = $t == 0 ? '' : '+30 minute';
@@ -356,6 +357,7 @@ class Calendar {
 						}
 					}
 					$h .= !$hasEvent ? '&nbsp;' : '';
+					$h .= $this->dateWrap[1];
 					$h .= "</td>";
 				}
 				$h .= "<tr>";
