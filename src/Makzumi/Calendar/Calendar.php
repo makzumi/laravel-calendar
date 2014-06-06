@@ -173,7 +173,9 @@ class Calendar {
 
 	private function buildHeader() {
 		$month_name = $this->month_lbls[$this->month - 1] . ' ' . $this->year;
-		$h = "<table class='" . $this->tableClass . "'>";
+		$vclass = strtolower($this->view);
+		$h = "<table class='" . $this->tableClass . " ".$vclass."'>";
+		$h .= "<thead>";
 		$h .= "<tr class='" . $this->headClass . "'>";
 		$cs = 5;
 		if ($this->view == 'week' || $this->view == 'day')
@@ -197,6 +199,9 @@ class Calendar {
 			$h .= "</th>";
 		}
 		$h .= "</tr>";
+		$h .= "</thead>";
+		
+		$h .= "<tbody>";
 
 		$h .= "<tr class='" . $this->labelsClass . "'>";
 
@@ -258,10 +263,12 @@ class Calendar {
 
 	private function buildBody() {
 		$day = 1;
-		$startingDay = date('N', strtotime('first day of this month'));
+		$now_date = $this->year.'-'.$this->month.'-01';
+		$startingDay = date('N', strtotime('first day of this month', strtotime($now_date)));
+		
 		$monthLength = $this->days_month[$this->month - 1];
 		$h = "<tr>";
-		for ($i = 0; $i < 9; $i++) {
+		for ($i = $startingDay == 7 ? 1 : 0; $i < 9; $i++) {
 			for ($j = 0; $j <= 6; $j++) {
 				$h .= "<td>";
 				$h .= $this->dateWrap[0];
@@ -287,6 +294,7 @@ class Calendar {
 			}
 		}
 		$h .= "</tr>";
+		$h .= "</tbody>";
 		$h .= "</table>";
 		$this->html .= $h;
 	}
@@ -325,6 +333,8 @@ class Calendar {
 				$h .= "<tr>";
 			}
 		}
+		$h .= "</tbody>";
+		$h .= "</table>";
 
 		$this->html .= $h;
 	}
@@ -338,7 +348,9 @@ class Calendar {
 				$h .= "<tr>";
 				$min = $t == 0 ? ":00" : ":30";
 				$h .= "<td class='$this->timeClass'>" . date('g:ia', strtotime($i . $min)) . "</td>";
+				
 				for ($k = 0; $k < count($this->week_days); $k++) {
+					
 					$h .= "<td>";
 					$h .= $this->dateWrap[0];
 					$wd = $this->week_days[$k];
@@ -363,6 +375,8 @@ class Calendar {
 				$h .= "<tr>";
 			}
 		}
+		$h .= "</tbody>";
+		$h .= "</table>";
 
 		$this->html .= $h;
 	}
