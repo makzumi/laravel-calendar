@@ -55,7 +55,7 @@ class Calendar {
 		$this->view = $view;
 		return $this;
 	}
-	
+
 	public function setTimeClass($class) {
 		$this->timeClass = $class;
 		return $this;
@@ -72,14 +72,14 @@ class Calendar {
 		$date = explode('-', $date);
 		$day = @$date[2] ? : date('d');
 		$month = @$date[1] ? : date('m');
-		
+
 		$year = @$date[0] ? : date('Y');
 
 		$this->day = @$day;
 		$this->month = @$month;
 		$this->year = @$year;
 		return $this;
-		
+
 	}
 
 	public function generate() {
@@ -100,30 +100,33 @@ class Calendar {
 
 	public function setBasePath($path) {
 		$this->basePath = $path;
-		return $this;		
+		return $this;
 	}
 
 	public function setDayLabels($array) {
-		if (count($array) != 7) return;
+		if (count($array) != 7)
+			return;
 		$this->day_lbls = $array;
-		return $this;		
+		return $this;
 	}
 
 	public function setMonthLabels($array) {
-		if (count($array) != 12) return;
+		if (count($array) != 12)
+			return;
 		$this->month_lbls = $array;
-		return $this;		
+		return $this;
 	}
 
 	public function setEvents($events) {
-		if (!is_array($events)) return;
+		if (!is_array($events))
+			return;
 		$this->events = $events;
-		return $this;		
+		return $this;
 	}
 
 	public function setEventsWrap($wrap) {
 		$this->eventWrap = $wrap;
-		return $this;		
+		return $this;
 	}
 
 	public function setDayWrap($wrap) {
@@ -174,7 +177,7 @@ class Calendar {
 	private function buildHeader() {
 		$month_name = $this->month_lbls[$this->month - 1] . ' ' . $this->year;
 		$vclass = strtolower($this->view);
-		$h = "<table class='" . $this->tableClass . " ".$vclass."'>";
+		$h = "<table class='" . $this->tableClass . " " . $vclass . "'>";
 		$h .= "<thead>";
 		$h .= "<tr class='" . $this->headClass . "'>";
 		$cs = 5;
@@ -200,34 +203,20 @@ class Calendar {
 		}
 		$h .= "</tr>";
 		$h .= "</thead>";
-		
+
 		$h .= "<tbody>";
-
-		$h .= "<tr class='" . $this->labelsClass . "'>";
-
-		if ($this->view == 'week' || $this->view == 'day') {
-			$cnt = 7;
-			if ($this->view == 'day')
-				$cnt = 3;
-			$i = date('N', strtotime($this->year . '-' . $this->month . '-' . $this->day));
-			if ($i == 7)
-				$i = 0;
-			$h .= "<td>&nbsp;</td>";
-			$h .= "<td colspan='$cnt'>";
-			$h .= $this->day_lbls[$i];
-			$h .= "</td>";
-		} else {
+		if($this->view != 'day' && $this->view != 'week'){
+			$h .= "<tr class='" . $this->labelsClass . "'>";
+	
 			for ($i = 0; $i <= 6; $i++) {
 				$h .= "<td>";
 				$h .= $this->day_lbls[$i];
 				$h .= "</td>";
 			}
+	
+			$h .= "</tr>";
 		}
-
-		$h .= "</tr>";
-
-		if ($this->view == 'week' || $this->view == 'day')
-			$h .= self::getWeekDays();
+		if ($this->view == 'day' || $this->view == 'week') $h .= self::getWeekDays();
 
 		$this->html .= $h;
 	}
@@ -246,11 +235,12 @@ class Calendar {
 		}
 
 		$this->week_days = array();
-		$h = "<tr>";
+		$h = "<tr class='" . $this->labelsClass . "'>";
 		$h .= "<td>&nbsp;</td>";
 		for ($j = 0; $j <= $cnt; $j++) {
 			$cs = $cnt == 0 ? 3 : 1;
 			$h .= "<td colspan='$cs'>";
+			$h .= $this->day_lbls[$j] . ' ';
 			$h .= $day;
 			$this->week_days[] = $day;
 			$day++;
@@ -263,9 +253,9 @@ class Calendar {
 
 	private function buildBody() {
 		$day = 1;
-		$now_date = $this->year.'-'.$this->month.'-01';
+		$now_date = $this->year . '-' . $this->month . '-01';
 		$startingDay = date('N', strtotime('first day of this month', strtotime($now_date)));
-		
+
 		$monthLength = $this->days_month[$this->month - 1];
 		$h = "<tr>";
 		for ($i = $startingDay == 7 ? 1 : 0; $i < 9; $i++) {
@@ -348,9 +338,9 @@ class Calendar {
 				$h .= "<tr>";
 				$min = $t == 0 ? ":00" : ":30";
 				$h .= "<td class='$this->timeClass'>" . date('g:ia', strtotime($i . $min)) . "</td>";
-				
+
 				for ($k = 0; $k < count($this->week_days); $k++) {
-					
+
 					$h .= "<td>";
 					$h .= $this->dateWrap[0];
 					$wd = $this->week_days[$k];
