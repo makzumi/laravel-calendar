@@ -254,9 +254,7 @@ class Calendar {
 	private function buildBody() {
 		
 		$day = 1;
-		
 		$now_date = $this->year . '-' . $this->month . '-01';
-		
 		$startingDay = date('N', strtotime('first day of this month', strtotime($now_date)));
 
 		$monthLength = $this->days_month[$this->month - 1];
