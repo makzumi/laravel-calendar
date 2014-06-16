@@ -260,13 +260,13 @@ class Calendar {
 		$h = "<tr>";
 		for ($i = $startingDay == 7 ? 1 : 0; $i < 9; $i++) {
 			for ($j = 0; $j <= 6; $j++) {
-				$h .= "<td>";
+				$curr_date = $this->getDayDate($day);
+				$h .= "<td data-datetime='$curr_date'>";
 				$h .= $this->dateWrap[0];
 				if ($day <= $monthLength && ($i > 0 || $j >= $startingDay)) {
 					$h .= $this->dayWrap[0];
 					$h .= $day;
 					$h .= $this->dayWrap[1];
-					$curr_date = $this->getDayDate($day);
 					$h .= $this->buildEvents($curr_date);
 					$day++;
 				} else {
@@ -299,13 +299,14 @@ class Calendar {
 				$min = $t == 0 ? ":00" : ":30";
 				$h .= "<td class='$this->timeClass'>" . date('g:ia', strtotime($i . $min)) . "</td>";
 				for ($k = 0; $k < 1; $k++) {
-					$h .= "<td colspan='3'>";
-					$h .= $this->dateWrap[0];
 					$wd = $this->week_days[$k];
 					$time_r = $this->year . '-' . $this->month . '-' . $wd . ' ' . $i . ':00:00';
 					$min = $t == 0 ? '' : '+30 minute';
 					$time_1 = strtotime($time_r . $min);
 					$time_2 = strtotime(date('Y-m-d H:i:s', $time_1) . '+30 minute');
+					$dt = date('Y-m-d H:i:s', $time_1);
+					$h .= "<td colspan='3' data-datetime='$dt'>";
+					$h .= $this->dateWrap[0];
 
 					$hasEvent = FALSE;
 					foreach ($events as $key=>$event) {
@@ -320,7 +321,7 @@ class Calendar {
 					$h .= $this->dateWrap[1];
 					$h .= "</td>";
 				}
-				$h .= "<tr>";
+				$h .= "</tr>";
 			}
 		}
 		$h .= "</tbody>";
@@ -341,13 +342,14 @@ class Calendar {
 
 				for ($k = 0; $k < count($this->week_days); $k++) {
 
-					$h .= "<td>";
-					$h .= $this->dateWrap[0];
 					$wd = $this->week_days[$k];
 					$time_r = $this->year . '-' . $this->month . '-' . $wd . ' ' . $i . ':00:00';
 					$min = $t == 0 ? '' : '+30 minute';
 					$time_1 = strtotime($time_r . $min);
 					$time_2 = strtotime(date('Y-m-d H:i:s', $time_1) . '+30 minute');
+					$dt = date('Y-m-d H:i:s', $time_1);
+					$h .= "<td data-datetime='$dt'>";
+					$h .= $this->dateWrap[0];
 
 					$hasEvent = FALSE;
 					foreach ($events as $key=>$event) {
@@ -362,7 +364,7 @@ class Calendar {
 					$h .= $this->dateWrap[1];
 					$h .= "</td>";
 				}
-				$h .= "<tr>";
+				$h .= "</tr>";
 			}
 		}
 		$h .= "</tbody>";
