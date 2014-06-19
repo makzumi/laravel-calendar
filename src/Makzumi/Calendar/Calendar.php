@@ -35,7 +35,7 @@ class Calendar {
 	private $dateWrap = array('<div class="date">', '</div>');
 	private $labelsClass = 'cal_labels';
 	private $eventWrap = array('<p>', '</p>');
-	
+
 	private $today;
 
 	public function __construct() {
@@ -44,7 +44,7 @@ class Calendar {
 		$this->year = date('Y');
 		$this->today = date('Y-m-d');
 	}
-	
+
 	public function make() {
 		return new static();
 	}
@@ -208,18 +208,19 @@ class Calendar {
 		$h .= "</thead>";
 
 		$h .= "<tbody>";
-		if($this->view != 'day' && $this->view != 'week'){
+		if ($this->view != 'day' && $this->view != 'week') {
 			$h .= "<tr class='" . $this->labelsClass . "'>";
-	
+
 			for ($i = 0; $i <= 6; $i++) {
 				$h .= "<td>";
 				$h .= $this->day_lbls[$i];
 				$h .= "</td>";
 			}
-	
+
 			$h .= "</tr>";
 		}
-		if ($this->view == 'day' || $this->view == 'week') $h .= self::getWeekDays();
+		if ($this->view == 'day' || $this->view == 'week')
+			$h .= self::getWeekDays();
 
 		$this->html .= $h;
 	}
@@ -238,15 +239,24 @@ class Calendar {
 		}
 
 		$this->week_days = array();
+		$mlen = $this->days_month[intval($this->month) - 1];
+
 		$h = "<tr class='" . $this->labelsClass . "'>";
 		$h .= "<td>&nbsp;</td>";
 		for ($j = 0; $j <= $cnt; $j++) {
 			$cs = $cnt == 0 ? 3 : 1;
 			$h .= "<td colspan='$cs'>";
-			if ($this->view == 'day') $getDayNumber = date('w', strtotime($time));
-			else $getDayNumber = $j;			
-			$h .= $this->day_lbls[$getDayNumber] . ' ';
-			$h .= $day;
+			if ($this->view == 'day')
+				$getDayNumber = date('w', strtotime($time));
+			else
+				$getDayNumber = $j;
+			if($day <= $mlen){
+			}else{
+				$day = 1;
+				$j = 0;
+			}
+				$h .= $this->day_lbls[$getDayNumber] . ' ';
+				$h .= intval($day);
 			$this->week_days[] = $day;
 			$day++;
 			$h .= "</td>";
@@ -267,7 +277,8 @@ class Calendar {
 			for ($j = 0; $j <= 6; $j++) {
 				$curr_date = $this->getDayDate($day);
 				$is_today = "";
-				if($curr_date == $this->today) $is_today ="class='today'";
+				if ($curr_date == $this->today)
+					$is_today = "class='today'";
 				$h .= "<td data-datetime='$curr_date' $is_today>";
 				$h .= $this->dateWrap[0];
 				if ($day <= $monthLength && ($i > 0 || $j >= $startingDay)) {
@@ -481,4 +492,5 @@ class Calendar {
 				$vars .= '&' . $key . '=' . $value;
 		return $vars;
 	}
+
 }
