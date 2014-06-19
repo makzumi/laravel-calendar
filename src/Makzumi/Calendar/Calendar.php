@@ -35,13 +35,16 @@ class Calendar {
 	private $dateWrap = array('<div class="date">', '</div>');
 	private $labelsClass = 'cal_labels';
 	private $eventWrap = array('<p>', '</p>');
+	
+	private $today;
 
 	public function __construct() {
 		$this->day = date('d');
 		$this->month = date('n');
 		$this->year = date('Y');
+		$this->today = date('Y-m-d');
 	}
-
+	
 	public function make() {
 		return new static();
 	}
@@ -240,7 +243,9 @@ class Calendar {
 		for ($j = 0; $j <= $cnt; $j++) {
 			$cs = $cnt == 0 ? 3 : 1;
 			$h .= "<td colspan='$cs'>";
-			$h .= $this->day_lbls[$j] . ' ';
+			if ($this->view == 'day') $getDayNumber = date('w', strtotime($time));
+			else $getDayNumber = $j;			
+			$h .= $this->day_lbls[$getDayNumber] . ' ';
 			$h .= $day;
 			$this->week_days[] = $day;
 			$day++;
@@ -252,7 +257,6 @@ class Calendar {
 	}
 
 	private function buildBody() {
-		
 		$day = 1;
 		$now_date = $this->year . '-' . $this->month . '-01';
 		$startingDay = date('N', strtotime('first day of this month', strtotime($now_date)));
@@ -262,7 +266,9 @@ class Calendar {
 		for ($i = $startingDay == 7 ? 1 : 0; $i < 9; $i++) {
 			for ($j = 0; $j <= 6; $j++) {
 				$curr_date = $this->getDayDate($day);
-				$h .= "<td data-datetime='$curr_date'>";
+				$is_today = "";
+				if($curr_date == $this->today) $is_today ="class='today'";
+				$h .= "<td data-datetime='$curr_date' $is_today>";
 				$h .= $this->dateWrap[0];
 				if ($day <= $monthLength && ($i > 0 || $j >= $startingDay)) {
 					$h .= $this->dayWrap[0];
@@ -475,5 +481,4 @@ class Calendar {
 				$vars .= '&' . $key . '=' . $value;
 		return $vars;
 	}
-
 }
