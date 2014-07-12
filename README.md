@@ -46,7 +46,7 @@ To use, create a new Calender instance and generate it, below you'll find severa
 		$cal->setNextIcon('>>'); //Can also be html: <i class='fa fa-chevron-right'></i>
 		$cal->setPrevIcon('<<'); // Same as above
 		$cal->setDayLabels(array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')); //Label names for week days
-		$cal->setMonthLabels(array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');); //Month names
+		$cal->setMonthLabels(array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December')); //Month names
 		$cal->setDateWrap(array('<div>','</div>')); //Set cell inner content wrapper
 		$cal->setTableClass('table'); //Set the table's class name
 		$cal->setHeadClass('table-header'); //Set top header's class name

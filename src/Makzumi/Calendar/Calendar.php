@@ -2,7 +2,7 @@
 namespace Makzumi\Calendar;
 
 class Calendar {
-
+	//SORRY FOR LACK OF DOCUMENTATION, I'LL GET TO IT SOON
 	private $day_lbls = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
 	private $month_lbls = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 	private $days_month = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
@@ -250,13 +250,13 @@ class Calendar {
 				$getDayNumber = date('w', strtotime($time));
 			else
 				$getDayNumber = $j;
-			if($day <= $mlen){
-			}else{
+			if ($day <= $mlen) {
+
+			} else {
 				$day = 1;
-				$j = 0;
 			}
-				$h .= $this->day_lbls[$getDayNumber] . ' ';
-				$h .= intval($day);
+			$h .= $this->day_lbls[$getDayNumber] . ' ';
+			$h .= intval($day);
 			$this->week_days[] = $day;
 			$day++;
 			$h .= "</td>";
