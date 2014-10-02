@@ -362,9 +362,15 @@ class Calendar {
 
 					$wd = $this->week_days[$k];
 					$time_r = $this->year . '-' . $this->month . '-' . $wd . ' ' . $i . ':00:00';
+					//we also need next month string
+					$time_r_next_month = $this->year . '-' . (string)($this->month + 1) . '-' . $wd . ' ' . $i . ':00:00';
 					$min = $t == 0 ? '' : '+30 minute';
 					$time_1 = strtotime($time_r . $min);
 					$time_2 = strtotime(date('Y-m-d H:i:s', $time_1) . '+30 minute');
+					//events need additional checking, if they are in same week but next month they will not show up
+					//so we need somt additional time rules to check
+					$time_3 = strtotime($time_r_next_month . $min);
+					$time_4 = strtotime(date('Y-m-d H:i:s', $time_3) . '+60 minute');
 					$dt = date('Y-m-d H:i:s', $time_1);
 					$h .= "<td data-datetime='$dt'>";
 					$h .= $this->dateWrap[0];
@@ -373,7 +379,8 @@ class Calendar {
 					foreach ($events as $key=>$event) {
 						//EVENT TIME AND DATE
 						$time_e = strtotime($key);
-						if ($time_e >= $time_1 && $time_e < $time_2) {
+						//and the additional check should be done in the below conditional
+						if (($time_e >= $time_1 && $time_e < $time_2) || ($time_e >= $time_3 && $time_e < $time_4)) {
 							$hasEvent = TRUE;
 							$h .= $this->buildEvents(FALSE, $event);
 						}
