@@ -270,7 +270,8 @@ class Calendar {
 		$day = 1;
 		$now_date = $this->year . '-' . $this->month . '-01';
 		$startingDay = date('N', strtotime('first day of this month', strtotime($now_date)));
-
+		//Add the following line if you want to start the week with monday instead of sunday. Or change the number to suit your needs.
+		//$startingDay = $startingDay - 1;
 		$monthLength = $this->days_month[$this->month - 1];
 		$h = "<tr>";
 		for ($i = $startingDay == 7 ? 1 : 0; $i < 9; $i++) {
