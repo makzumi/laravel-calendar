@@ -35,6 +35,7 @@ class Calendar {
 	private $timeClass = 'ctime';
 	private $dayWrap = array('<div class="cal_day">', '</div>');
 	private $dateWrap = array('<div class="date">', '</div>');
+	private $highlightEvents = false;
 	private $labelsClass = 'cal_labels';
 	private $eventWrap = array('<p>', '</p>');
 
@@ -185,6 +186,11 @@ class Calendar {
 		return $this;
 	}
 
+	public function setHighlightEvents($bool) {
+		$this->highlightEvents = $bool;
+		return $this;
+	}
+
 	private function buildHeader() {
 		$month_name = $this->month_lbls[$this->month - 1] . ' ' . $this->year;
 		$vclass = strtolower($this->view);
@@ -276,6 +282,20 @@ class Calendar {
 		return $h;
 	}
 
+	private function hasEvent($date) {
+		if (!$this->highlightEvents) {
+			return false;
+		}
+		$keys = array_keys($this->events);
+		$match = false;
+		foreach($keys as $key=>$val) {
+			if (substr($val, 0, 10) === $date) {
+				$match = true;
+			}
+		}
+		return $match;
+	}
+
 	private function buildBody() {
 		$day = 1;
 		$now_date = $this->year . '-' . $this->month . '-01';
@@ -287,10 +307,13 @@ class Calendar {
 		for ($i = $startingDay == 7 ? 1 : 0; $i < 9; $i++) {
 			for ($j = 0; $j <= 6; $j++) {
 				$curr_date = $this->getDayDate($day);
-				$is_today = "";
+				$classes = [];
+				if ($this->hasEvent($curr_date))
+					$classes[] = 'event';
 				if ($curr_date == $this->today)
-					$is_today = "class='today'";
-				$h .= "<td data-datetime='$curr_date' $is_today>";
+					$classes[] = 'today';
+				$class = count($classes) ? ' class="' . implode(' ', $classes) . '"' : '';
+				$h .= "<td data-datetime='$curr_date' $class>";
 				$h .= $this->dateWrap[0];
 				if ($day <= $monthLength && ($i > 0 || $j >= $startingDay)) {
 					$h .= $this->dayWrap[0];
