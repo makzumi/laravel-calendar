@@ -7,6 +7,8 @@ class Calendar {
 	private $month_lbls = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 	private $days_month = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
 	private $week_days = array();
+	private $week_starts_monday = FALSE;
+	private $week_start_day = 'sunday';
 	private $day;
 	private $month;
 	private $year;
@@ -177,6 +179,12 @@ class Calendar {
 		return $this;
 	}
 
+	public function setWeekStartsMonday($bool) {
+		$this->week_starts_monday = $bool;
+		$this->week_start_day = $bool ? 'monday' : 'sunday';
+		return $this;
+	}
+
 	private function buildHeader() {
 		$month_name = $this->month_lbls[$this->month - 1] . ' ' . $this->year;
 		$vclass = strtolower($this->view);
@@ -213,7 +221,8 @@ class Calendar {
 
 			for ($i = 0; $i <= 6; $i++) {
 				$h .= "<td>";
-				$h .= $this->day_lbls[$i];
+				$startingDay = $this->week_starts_monday ? ($i + 1) % 7 : $i;
+				$h .= $this->day_lbls[$startingDay];
 				$h .= "</td>";
 			}
 
@@ -228,9 +237,9 @@ class Calendar {
 	private function getWeekDays() {
 		$time = date('Y-m-d', strtotime($this->year . '-' . $this->month . '-' . $this->day));
 		if ($this->view == 'week') {
-			$sunday = strtotime('last sunday', strtotime($time . ' +1day'));
-			$day = date('j', $sunday);
-			$startingDay = date('N', $sunday);
+			$week_start_time = strtotime('last '.$this->week_start_day, strtotime($time . ' +1day'));
+			$day = date('j', $week_start_time);
+			$startingDay = date('N', $week_start_time);
 			$cnt = 6;
 		}
 		if ($this->view == 'day') {
@@ -255,7 +264,8 @@ class Calendar {
 			} else {
 				$day = 1;
 			}
-			$h .= $this->day_lbls[$getDayNumber] . ' ';
+			$startingDay = $this->week_starts_monday ? ($getDayNumber + 1) % 7 : $getDayNumber;
+			$h .= $this->day_lbls[$startingDay] . ' ';
 			$h .= intval($day);
 			$this->week_days[] = $day;
 			$day++;
@@ -271,7 +281,7 @@ class Calendar {
 		$now_date = $this->year . '-' . $this->month . '-01';
 		$startingDay = date('N', strtotime('first day of this month', strtotime($now_date)));
 		//Add the following line if you want to start the week with monday instead of sunday. Or change the number to suit your needs.
-		//$startingDay = $startingDay - 1;
+		$startingDay = $this->week_starts_monday ? $startingDay - 1 : $startingDay;
 		$monthLength = $this->days_month[$this->month - 1];
 		$h = "<tr>";
 		for ($i = $startingDay == 7 ? 1 : 0; $i < 9; $i++) {
@@ -446,7 +456,7 @@ class Calendar {
 		$time = $y . '-' . $m . '-' . $d;
 
 		if ($this->view == "week") {
-			$time = strtotime('last sunday', strtotime($time . ' +1 day'));
+			$time = strtotime('last '.$this->week_start_day, strtotime($time . ' +1 day'));
 			$time = date('Y-m-d', $time);
 			$time = date('Y-m-d', strtotime($time . ' -1 week'));
 		} else if ($this->view == "day") {
@@ -468,7 +478,7 @@ class Calendar {
 		$time = $y . '-' . $m . '-' . $d;
 
 		if ($this->view == "week") {
-			$time = strtotime('next sunday', strtotime($time . ' -1 day'));
+			$time = strtotime('next '.$this->week_start_day, strtotime($time . ' -1 day'));
 			$time = date('Y-m-d', $time);
 			$time = date('Y-m-d', strtotime($time . '+1week'));
 		} else if ($this->view == "day") {
