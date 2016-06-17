@@ -7,6 +7,8 @@ class Calendar {
 	private $month_lbls = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 	private $days_month = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
 	private $week_days = array();
+	private $week_starts_monday = FALSE;
+	private $week_start_day = 'sunday';
 	private $day;
 	private $month;
 	private $year;
@@ -33,6 +35,7 @@ class Calendar {
 	private $timeClass = 'ctime';
 	private $dayWrap = array('<div class="cal_day">', '</div>');
 	private $dateWrap = array('<div class="date">', '</div>');
+	private $highlightEvents = false;
 	private $labelsClass = 'cal_labels';
 	private $eventWrap = array('<p>', '</p>');
 
@@ -177,6 +180,17 @@ class Calendar {
 		return $this;
 	}
 
+	public function setWeekStartsMonday($bool) {
+		$this->week_starts_monday = $bool;
+		$this->week_start_day = $bool ? 'monday' : 'sunday';
+		return $this;
+	}
+
+	public function setHighlightEvents($bool) {
+		$this->highlightEvents = $bool;
+		return $this;
+	}
+
 	private function buildHeader() {
 		$month_name = $this->month_lbls[$this->month - 1] . ' ' . $this->year;
 		$vclass = strtolower($this->view);
@@ -213,7 +227,8 @@ class Calendar {
 
 			for ($i = 0; $i <= 6; $i++) {
 				$h .= "<td>";
-				$h .= $this->day_lbls[$i];
+				$startingDay = $this->week_starts_monday ? ($i + 1) % 7 : $i;
+				$h .= $this->day_lbls[$startingDay];
 				$h .= "</td>";
 			}
 
@@ -228,9 +243,9 @@ class Calendar {
 	private function getWeekDays() {
 		$time = date('Y-m-d', strtotime($this->year . '-' . $this->month . '-' . $this->day));
 		if ($this->view == 'week') {
-			$sunday = strtotime('last sunday', strtotime($time . ' +1day'));
-			$day = date('j', $sunday);
-			$startingDay = date('N', $sunday);
+			$week_start_time = strtotime('last '.$this->week_start_day, strtotime($time . ' +1day'));
+			$day = date('j', $week_start_time);
+			$startingDay = date('N', $week_start_time);
 			$cnt = 6;
 		}
 		if ($this->view == 'day') {
@@ -257,7 +272,8 @@ class Calendar {
 			} else {
 				$day = 1;
 			}
-			$h .= $this->day_lbls[$getDayNumber] . ' ';
+			$startingDay = $this->week_starts_monday ? ($getDayNumber + 1) % 7 : $getDayNumber;
+			$h .= $this->day_lbls[$startingDay] . ' ';
 			$h .= intval($day);
 			$this->week_days[] = $day;
 			$day++;
@@ -268,12 +284,26 @@ class Calendar {
 		return $h;
 	}
 
+	private function hasEvent($date) {
+		if (!$this->highlightEvents) {
+			return false;
+		}
+		$keys = array_keys($this->events);
+		$match = false;
+		foreach($keys as $key=>$val) {
+			if (substr($val, 0, 10) === $date) {
+				$match = true;
+			}
+		}
+		return $match;
+	}
+
 	private function buildBody() {
 		$day = 1;
 		$now_date = $this->year . '-' . $this->month . '-01';
 		$startingDay = date('N', strtotime('first day of this month', strtotime($now_date)));
 		//Add the following line if you want to start the week with monday instead of sunday. Or change the number to suit your needs.
-		//$startingDay = $startingDay - 1;
+		$startingDay = $this->week_starts_monday ? $startingDay - 1 : $startingDay;
 		$monthLength = $this->days_month[$this->month - 1];
 		if ($this->month == 2 && ((($this->year % 4) == 0) && ((($this->year % 100) != 0) || (($this->year % 400) == 0)))) {
 			$monthLength = $monthLength + 1;
@@ -282,10 +312,13 @@ class Calendar {
 		for ($i = $startingDay == 7 ? 1 : 0; $i < 9; $i++) {
 			for ($j = 0; $j <= 6; $j++) {
 				$curr_date = $this->getDayDate($day);
-				$is_today = "";
+				$classes = [];
+				if ($this->hasEvent($curr_date))
+					$classes[] = 'event';
 				if ($curr_date == $this->today)
-					$is_today = "class='today'";
-				$h .= "<td data-datetime='$curr_date' $is_today>";
+					$classes[] = 'today';
+				$class = count($classes) ? ' class="' . implode(' ', $classes) . '"' : '';
+				$h .= "<td data-datetime='$curr_date' $class>";
 				$h .= $this->dateWrap[0];
 				if ($day <= $monthLength && ($i > 0 || $j >= $startingDay)) {
 					$h .= $this->dayWrap[0];
@@ -451,7 +484,7 @@ class Calendar {
 		$time = $y . '-' . $m . '-' . $d;
 
 		if ($this->view == "week") {
-			$time = strtotime('last sunday', strtotime($time . ' +1 day'));
+			$time = strtotime('last '.$this->week_start_day, strtotime($time . ' +1 day'));
 			$time = date('Y-m-d', $time);
 			$time = date('Y-m-d', strtotime($time . ' -1 week'));
 		} else if ($this->view == "day") {
@@ -473,7 +506,7 @@ class Calendar {
 		$time = $y . '-' . $m . '-' . $d;
 
 		if ($this->view == "week") {
-			$time = strtotime('next sunday', strtotime($time . ' -1 day'));
+			$time = strtotime('next '.$this->week_start_day, strtotime($time . ' -1 day'));
 			$time = date('Y-m-d', $time);
 			$time = date('Y-m-d', strtotime($time . '+1week'));
 		} else if ($this->view == "day") {
